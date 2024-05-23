@@ -2,25 +2,6 @@
 
 This project is a mini version of Postman, allowing you to execute HTTP requests, manage environment variables, and save/load workspaces.
 
-## Project Structure
-
-```
-postbuddy/
-├── app.py
-├── static/
-│   └── styles.css
-├── templates/
-│   ├── base.html
-│   ├── index.html
-│   └── variables.html
-├── utils/
-│   ├── request_handler.py
-│   ├── workspace_manager.py
-│   └── __init__.py
-├── data/
-│   └── sample_workspace.json
-└── README.md
-```
 
 ## How to Run
 
