@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>New Request</h2>
+        <form id="request-form">
+            <div class="form-group">
+                <label for="method">Method:</label>
+                <select class="form-control" id="method" name="method">
+                    <option>GET</option>
+                    <option>POST</option>
+                    <option>PUT</option>
+                    <option>DELETE</option>
+                    <option>PATCH</option>
+                    <option>HEAD</option>
+                    <option>OPTIONS</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="url">URL:</label>
+                <input type="text" class="form-control" id="url" name="url">
+            </div>
+            <div class="form-group">
+                <label for="headers">Headers (key: value):</label>
+                <textarea class="form-control" id="headers" name="headers" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="data">Data (raw):</label>
+                <textarea class="form-control" id="data" name="data" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="auth_type">Auth Type:</label>
+                <select class="form-control" id="auth_type" name="auth_type">
+                    <option>None</option>
+                    <option>Basic</option>
+                    <option>Bearer Token</option>
+                    <option>API Key</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="auth">Auth (user:password / token / key:value):</label>
+                <input type="text" class="form-control" id="auth" name="auth">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addRequest()">Add Request</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h2>Requests</h2>
+        <textarea class="form-control" id="requests_list" rows="10"></textarea>
+        <button type="button" class="btn btn-success mt-2" onclick="executeRequests()">Execute</button>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h2>Response</h2>
+        <textarea class="form-control" id="response" rows="10" readonly></textarea>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h2>Extract Variable</h2>
+        <form id="extract-form">
+            <div class="form-group">
+                <label for="extract_var_name">Variable Name:</label>
+                <input type="text" class="form-control" id="extract_var_name" name="extract_var_name">
+            </div>
+            <div class="form-group">
+                <label for="extract_var_regex">Regex:</label>
+                <input type="text" class="form-control" id="extract_var_regex" name="extract_var_regex">
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function addRequest() {
+        const method = document.getElementById('method').value;
+        const url = document.getElementById('url').value;
+        const headers = document.getElementById('headers').value;
+        const data = document.getElementById('data').value;
+        const authType = document.getElementById('auth_type').value;
+        const auth = document.getElementById('auth').value;
+
+        const requestEntry = `Method: ${method}\nURL: ${url}\nHeaders: ${headers}\nData: ${data}\nAuth Type: ${authType}\nAuth: ${auth}\n\n`;
+        const requestsList = document.getElementById('requests_list');
+        requestsList.value += requestEntry;
+    }
+
+    function executeRequests() {
+        const requestsList = document.getElementById('requests_list').value;
+        const extractVarName = document.getElementById('extract_var_name').value;
+        const extractVarRegex = document.getElementById('extract_var_regex').value;
+
+        fetch('/execute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `requests_list=${encodeURIComponent(requestsList)}&extract_var_name=${encodeURIComponent(extractVarName)}&extract_var_regex=${encodeURIComponent(extractVarRegex)}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            const responseBox = document.getElementById('response');
+            responseBox.value = data.join('\n');
+        });
+    }
+</script>
+{% endblock %}

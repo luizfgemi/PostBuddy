@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Environment Variables</h2>
+<form method="POST">
+    <div class="form-group">
+        <label for="env_name">Environment Name:</label>
+        <input type="text" class="form-control" id="env_name" name="env_name">
+    </div>
+    <div class="form-group">
+        <label for="var_name">Variable Name:</label>
+        <input type="text" class="form-control" id="var_name" name="var_name">
+    </div>
+    <div class="form-group">
+        <label for="var_value">Variable Value:</label>
+        <input type="text" class="form-control" id="var_value" name="var_value">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Variable</button>
+</form>
+<h3 class="mt-4">Current Variables</h3>
+<pre>{{ environment_variables | tojson(indent=2) }}</pre>
+{% endblock %}

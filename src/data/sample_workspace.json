@@ -1,0 +1,10 @@
+{
+    "Development": {
+        "base_url": "http://dev.example.com",
+        "api_key": "dev_key"
+    },
+    "Production": {
+        "base_url": "http://prod.example.com",
+        "api_key": "prod_key"
+    }
+}
